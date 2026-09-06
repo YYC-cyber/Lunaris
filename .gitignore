@@ -1,0 +1,75 @@
+# ===== Python (backend) =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# ===== uv =====
+.uv/
+uv.lock
+
+# ===== Node / Electron (frontend, electron) =====
+node_modules/
+dist/
+dist-electron/
+*.local
+
+# ===== 构建产物 =====
+*.exe
+*.dmg
+*.AppImage
+
+# ===== IDE / 系统 =====
+.idea/
+.vscode/
+.DS_Store
+
+# ===== 密钥与配置 =====
+*.pem
+*.key
+*.cert
+.env
+.env.local
+backend/.env
+backend/.env.local
+
+# ===== 数据库文件 =====
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+
+# ===== 日志 =====
+backend/logs/
+*.log
+*.jsonl
+
+# ===== 用户数据与运行产物（隐私保护）=====
+backend/data/uploads/
+backend/data/tts/
+backend/data/whisper/
+backend/data/knowledge/
+backend/data/cache/
+backend/data/vector/
+backend/data/souls/*/ref/
+backend/data/souls/*/memories.md
+backend/data/souls/*/viewpoints.md
+
+# ===== 备份文件 =====
+backend/backups/
+*.bak
+
+# ===== 本地工具与会话记忆（隐私，不提交） =====
+.workbuddy/
+.claude/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ===== 临时测试脚本（含开发密码）=====
+test-api.js
+test-api-full.js
+test-group-chat.js
+start-admin.sh

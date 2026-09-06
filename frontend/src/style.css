@@ -1,0 +1,84 @@
+/* 导入新的色系和动画定义 */
+@import './styles/colors.css';
+@import './styles/animations.css';
+
+:root {
+  /* 保留旧的微信风格变量用于兼容 */
+  --wx-green: #07c160;
+  --wx-bg: #ededed;
+  --wx-dark: #2e2e2e;
+  --wx-sidebar: #2e2e2e;
+
+  /* 字体大小缩放 */
+  --font-scale: 1;
+}
+
+:root.font-size-small { --font-scale: 0.875; }
+:root.font-size-normal { --font-scale: 1; }
+:root.font-size-large { --font-scale: 1.125; }
+:root.font-size-xlarge { --font-scale: 1.25; }
+
+:root.dark {
+  --color-bg-main: #1a1a1a;
+  --color-bg-light: #2d2d2d;
+  --color-bg-gradient: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+  --color-text-primary: #e8e8e8;
+  --color-text-secondary: #a8a8a8;
+  --color-text-light: #808080;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: var(--color-text-primary);
+  background: var(--color-bg-main);
+  overflow: hidden;
+  font-size: calc(14px * var(--font-scale));
+}
+
+/* 滚动条 - 改成温暖色系 */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 165, 212, 0.4);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 165, 212, 0.6);
+}
+
+:root.dark ::-webkit-scrollbar-thumb {
+  background: rgba(212, 165, 212, 0.6);
+}
+
+:root.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 165, 212, 0.8);
+}
+
+/* 通用聊天气泡 - 升级设计 */
+.bubble {
+  max-width: 60%;
+  padding: 10px 14px;
+  border-radius: var(--radius-bubble);
+  word-break: break-word;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  font-size: 14px;
+  position: relative;
+  box-shadow: var(--shadow-soft);
+  animation: slideInUp 0.3s ease-out;
+}
+.bubble.ai {
+  background: var(--color-ai-gradient);
+  color: var(--color-text-primary);
+  align-self: flex-start;
+}
+.bubble.user {
+  background: var(--color-user);
+  color: var(--color-text-primary);
+  align-self: flex-end;
+}

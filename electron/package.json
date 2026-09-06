@@ -1,0 +1,38 @@
+{
+  "name": "lunaris-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "main": "main.js",
+  "description": "Lunaris 桌面壳（Electron）",
+  "scripts": {
+    "start": "electron .",
+    "build:renderer": "cd ../frontend && npm run build",
+    "build:mac": "npm run build:renderer && electron-builder --mac dmg",
+    "build:win": "npm run build:renderer && electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^28",
+    "electron-builder": "^24"
+  },
+  "build": {
+    "appId": "com.lunaris.app",
+    "productName": "Lunaris",
+    "files": [
+      "main.js",
+      "preload.js",
+      "assets/**",
+      "renderer/**"
+    ],
+    "directories": {
+      "output": "dist-electron"
+    },
+    "mac": {
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.social-networking"
+    },
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": "nsis"
+    }
+  }
+}

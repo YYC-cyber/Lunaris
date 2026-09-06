@@ -1,0 +1,60 @@
+# ===== 开发工具与依赖 =====
+node_modules/
+npm-debug.log
+package-lock.json
+frontend/
+frontend/node_modules/
+frontend/dist/
+
+# ===== Python 虚拟环境 =====
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# ===== 版本控制 =====
+.git/
+.gitignore
+.github/
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ===== 其他子项目（后端镜像用不到） =====
+electron/
+admin-react/
+
+# ===== 环境与配置（不要 .env，需要在运行时注入，防止隐私泄漏） =====
+**/.env
+**/.env.local
+**/.env.*.local
+backend/.env
+backend/.env.local
+
+# ===== 日志与临时 =====
+*.log
+*.tmp
+.pytest_cache/
+.mypy_cache/
+
+# ===== 文档 =====
+*.md
+docs/
+.docs/
+
+# ===== 构建输出 =====
+dist/
+build/
+
+# ===== 用户数据（需要挂载卷处理，构建时不需要） =====
+backend/uploads/
+backend/data/
+backend/logs/

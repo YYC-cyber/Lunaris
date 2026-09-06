@@ -1,0 +1,99 @@
+/* 温暖治愈色系定义 */
+:root,
+:root.light {
+  /* 主色系 */
+  --color-primary: #D4A5D4;        /* 紫粉主色 */
+  --color-secondary: #9B7BA9;      /* 深紫次色 */
+
+  /* 背景色 */
+  --color-bg-main: #FAFAF8;        /* 奶油白 */
+  --color-bg-light: #F8F5FB;       /* 淡紫 */
+  --color-bg-gradient: linear-gradient(135deg, #F8F5FB 0%, #FAFAF8 100%);
+
+  /* 时间段背景 */
+  --color-bg-morning: #FEF7D4;     /* 早晨黄 */
+  --color-bg-evening: #E8D4F1;     /* 晚间紫 */
+
+  /* 消息气泡 */
+  --color-ai-gradient: linear-gradient(135deg, #E8D4F1 0%, #F5D5E3 100%);
+  --color-user: #E8F4F8;           /* 浅蓝 */
+
+  /* 文字色 */
+  --color-text-primary: #3D2D4D;   /* 深紫文字 */
+  --color-text-secondary: #888888; /* 灰色副文本 */
+  --color-text-light: #AAAAAA;     /* 浅灰提示 */
+
+  /* 阴影 */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  /* 圆角 */
+  --radius-bubble: 16px;
+  --radius-card: 12px;
+  --radius-input: 24px;
+  --radius-btn: 8px;
+
+  /* 字体大小 */
+  --font-size-base: 14px;
+  --font-size-small: 12px;
+  --font-size-large: 16px;
+  --font-size-xlarge: 18px;
+}
+
+/* 深色模式 */
+:root.dark {
+  /* 主色系 */
+  --color-primary: #C088C8;        /* 紫粉主色（深色适配） */
+  --color-secondary: #9B7BA9;      /* 深紫次色 */
+
+  /* 背景色 */
+  --color-bg-main: #1a1a1a;        /* 深灰背景 */
+  --color-bg-light: #2d2d2d;       /* 稍浅深灰 */
+  --color-bg-gradient: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+
+  /* 时间段背景 */
+  --color-bg-morning: #3a3a2a;     /* 深黄调 */
+  --color-bg-evening: #3a2a3a;     /* 深紫调 */
+
+  /* 消息气泡 */
+  --color-ai-gradient: linear-gradient(135deg, #3a2a4a 0%, #4a3a5a 100%);
+  --color-user: #2a3a4a;           /* 深蓝 */
+
+  /* 文字色 */
+  --color-text-primary: #e8e8e8;   /* 浅灰文字 */
+  --color-text-secondary: #888888; /* 灰色副文本 */
+  --color-text-light: #666666;     /* 深灰提示 */
+
+  /* 阴影 */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.6);
+
+  /* 圆角 */
+  --radius-bubble: 16px;
+  --radius-card: 12px;
+  --radius-input: 24px;
+  --radius-btn: 8px;
+
+  /* 字体大小 */
+  --font-size-base: 14px;
+  --font-size-small: 12px;
+  --font-size-large: 16px;
+  --font-size-xlarge: 18px;
+}
+
+/* 字体大小调整 */
+.font-size-small {
+  font-size: 12px;
+}
+
+.font-size-normal {
+  font-size: 14px;
+}
+
+.font-size-large {
+  font-size: 16px;
+}
+
+.font-size-xlarge {
+  font-size: 18px;
+}

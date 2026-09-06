@@ -1,0 +1,22 @@
+# 排除不进入 Docker 镜像的文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+.env.*
+!.env.example
+logs/
+data/
+uploads/
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+.coverage
+htmlcov/
+.idea/
+.vscode/
+.DS_Store
+README.md

@@ -1,0 +1,2 @@
+# 数据库迁移脚本存放目录
+# 每个迁移：alembic revision --autogenerate -m "描述" 生成在此

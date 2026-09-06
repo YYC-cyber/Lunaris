@@ -1,0 +1,93 @@
+/* 温暖治愈动画定义 */
+
+/* 消息出现动画 */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 淡入淡出 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Typing 动画 */
+@keyframes typingDot {
+  0%, 60%, 100% { opacity: 0.4; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-8px); }
+}
+
+/* 脉冲动画（录音按钮） */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(212, 165, 212, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(212, 165, 212, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 165, 212, 0);
+  }
+}
+
+/* 浮出通知 */
+@keyframes floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 小心形跳动 */
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.2); }
+  28% { transform: scale(1); }
+}
+
+.slide-in {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+.float-up {
+  animation: floatUp 0.4s ease-out;
+}
+
+.heart-beat {
+  animation: heartBeat 0.6s ease-in-out;
+}
+
+.typing-dot {
+  animation: typingDot 1.4s infinite;
+}
+
+.typing-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}

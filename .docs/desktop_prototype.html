@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lunaris · 网页 / 桌面端高保真原型</title>
+<style>
+  :root {
+    --primary: #D4A5D4;
+    --secondary: #9B7BA9;
+    --cream: #FAFAF8;
+    --bg-purple: #F8F5FB;
+    --text: #3D2D4D;
+    --text-2: #888888;
+    --text-3: #AAAAAA;
+    --user-bubble: #E8F4F8;
+    --btn: linear-gradient(135deg, #D4A5D4 0%, #9B7BA9 100%);
+    --ai-bubble: linear-gradient(135deg, #E8D4F1 0%, #F5D5E3 100%);
+    --main-bg: linear-gradient(135deg, #F8F5FB 0%, #FAFAF8 100%);
+    --shadow-soft: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-medium: 0 4px 16px rgba(0,0,0,0.12);
+    --deep: #3D2D4D;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #E9E2EE; color: var(--text); padding: 48px 24px 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hero { max-width:1180px; margin:0 auto 40px; text-align:center; }
+  .hero .logo { display:inline-flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .hero .logo-mark { width:44px; height:44px; border-radius:13px; background:var(--btn); display:grid; place-items:center; font-size:22px; color:#fff; box-shadow:var(--shadow-medium); }
+  .hero h1 { font-size:30px; font-weight:600; }
+  .hero p { color:var(--text-2); font-size:15px; margin-top:8px; max-width:660px; margin-left:auto; margin-right:auto; line-height:1.7; }
+  .swatches { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:22px; }
+  .swatch { display:inline-flex; align-items:center; gap:8px; background:#fff; border-radius:999px; padding:6px 14px 6px 8px; box-shadow:var(--shadow-soft); font-size:12px; color:var(--text-2); }
+  .swatch i { width:22px; height:22px; border-radius:7px; display:inline-block; }
+
+  /* ===== 窗口框架 ===== */
+  .win { max-width:1180px; margin:0 auto 60px; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 28px 60px -24px rgba(61,45,77,.4); }
+  .win .chrome { display:flex; align-items:center; gap:12px; height:46px; padding:0 16px; background:#F3EEF6; border-bottom:1px solid #EAE2EF; }
+  .win .dots { display:flex; gap:6px; }
+  .win .dots i { width:12px; height:12px; border-radius:50%; }
+  .win .addr { flex:1; background:#fff; border:1px solid #EAE2EF; border-radius:8px; height:26px; display:flex; align-items:center; padding:0 12px; font-size:12px; color:var(--text-3); gap:6px; }
+  .win .body { display:flex; height:724px; }
+  .win-caption { text-align:center; margin-top:16px; font-weight:600; font-size:15px; }
+  .win-caption span { display:block; font-size:12px; color:var(--text-3); font-weight:400; margin-top:3px; }
+  .wrap { max-width:1180px; margin:0 auto; }
+
+  /* ===== 侧边栏 ===== */
+  .side { width:260px; background:var(--deep); color:#fff; display:flex; flex-direction:column; padding:20px 14px; flex:0 0 auto; }
+  .side .self { display:flex; align-items:center; gap:11px; padding:6px 8px 16px; border-bottom:1px solid rgba(255,255,255,.1); margin-bottom:14px; }
+  .side .self .avatar { width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,#93C5FD,#3B82F6); display:grid; place-items:center; font-weight:600; flex:0 0 auto; }
+  .side .self b { font-size:14px; display:block; }
+  .side .self span { font-size:11px; color:rgba(255,255,255,.55); }
+  .side .nav { display:flex; flex-direction:column; gap:4px; }
+  .side .nav .ni { display:flex; align-items:center; gap:11px; padding:10px 12px; border-radius:10px; font-size:14px; color:rgba(255,255,255,.72); cursor:pointer; }
+  .side .nav .ni .ico { font-size:17px; }
+  .side .nav .ni.on { background:rgba(212,165,212,.24); color:#fff; }
+  .side .h { font-size:10px; text-transform:uppercase; letter-spacing:.6px; color:rgba(255,255,255,.42); margin:18px 8px 8px; }
+  .side .soul { display:flex; gap:9px; padding:8px; border-radius:10px; cursor:pointer; align-items:center; }
+  .side .soul.on { background:rgba(212,165,212,.24); }
+  .side .soul .avatar { width:36px; height:36px; border-radius:10px; display:grid; place-items:center; font-size:13px; font-weight:600; flex:0 0 auto; }
+  .side .soul b { font-size:12.5px; display:block; }
+  .side .soul .xin { font-size:10px; font-style:italic; color:rgba(255,255,255,.58); }
+  .side .soul .bar { margin-top:5px; height:4px; border-radius:2px; background:rgba(255,255,255,.12); overflow:hidden; }
+  .side .soul .bar i { display:block; height:100%; background:linear-gradient(90deg,#D4A5D4,#9B7BA9); }
+
+  /* ===== 主区域 ===== */
+  .main { flex:1; background:var(--cream); display:flex; flex-direction:column; min-width:0; }
+  .main.padded { padding:28px 34px; }
+
+  /* 通用 */
+  .btn { border:none; cursor:pointer; border-radius:9px; background:var(--btn); color:#fff; font-weight:600; font-size:14px; padding:11px 18px; box-shadow:0 4px 12px rgba(155,123,169,.35); }
+  .btn.small { padding:8px 13px; font-size:12px; }
+  .btn.ghost { background:rgba(212,165,212,.14); color:var(--secondary); box-shadow:none; }
+  .input { width:100%; border:1px solid rgba(212,165,212,.35); background:rgba(255,255,255,.6); border-radius:11px; padding:10px 13px; font-size:14px; color:var(--text); outline:none; }
+  .input:focus { border-color:var(--primary); background:#fff; }
+  .label { font-size:12px; color:var(--text-2); margin:0 0 6px 2px; display:block; }
+  .avatar { border-radius:12px; color:#fff; font-weight:600; display:grid; place-items:center; flex:0 0 auto; }
+  .tag { display:inline-block; font-size:11px; color:var(--text-2); background:#EFE7F3; padding:3px 9px; border-radius:999px; margin-right:5px; }
+  .search { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.7); border:1px solid rgba(212,165,212,.25); border-radius:12px; padding:10px 14px; color:var(--text-3); font-size:13px; }
+  .page-title { font-size:20px; font-weight:600; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; }
+
+  /* 登录 */
+  .loginfull { background:var(--main-bg); height:724px; display:grid; place-items:center; }
+  .login-card { width:400px; padding:38px 34px; background:#fff; border-radius:20px; box-shadow:var(--shadow-medium); }
+  .login-card .lc-head { text-align:center; margin-bottom:24px; }
+  .login-card .mark { width:54px; height:54px; border-radius:17px; background:var(--btn); display:inline-grid; place-items:center; font-size:27px; color:#fff; }
+  .login-card h2 { font-size:19px; margin-top:12px; }
+  .login-card p { font-size:12px; color:var(--text-3); margin-top:4px; }
+  .tabs { display:flex; background:rgba(212,165,212,.14); border-radius:12px; padding:3px; margin-bottom:18px; }
+  .tabs .t { flex:1; text-align:center; padding:8px; border-radius:10px; font-size:13px; color:var(--text-2); cursor:pointer; }
+  .tabs .t.on { background:#fff; color:var(--text); font-weight:600; box-shadow:var(--shadow-soft); }
+  .field { margin-bottom:14px; }
+  .login-card .btn { width:100%; }
+  .social { display:flex; gap:10px; margin-top:16px; }
+  .social .sbtn { flex:1; text-align:center; padding:10px; border-radius:10px; background:#F8F5FB; font-size:12px; color:var(--text-2); cursor:pointer; }
+
+  /* 选择伴侣 */
+  .pickfull { background:var(--main-bg); height:724px; overflow:hidden; }
+  .pick-inner { max-width:880px; margin:0 auto; padding:44px 20px; }
+  .pick-head { text-align:center; margin-bottom:26px; }
+  .pick-head h3 { font-size:22px; }
+  .pick-head p { font-size:13px; color:var(--text-3); margin-top:6px; }
+  .soul-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .soul-card { background:#fff; border-radius:16px; padding:20px; text-align:center; box-shadow:var(--shadow-soft); cursor:pointer; }
+  .soul-card .avatar { width:64px; height:64px; margin:0 auto 12px; font-size:22px; }
+  .soul-card h4 { font-size:17px; color:var(--secondary); }
+  .soul-card .tags { margin:9px 0 8px; }
+  .soul-card p { font-size:12px; color:var(--text-2); line-height:1.6; min-height:38px; }
+  .soul-card .btn { width:100%; margin-top:12px; font-size:13px; padding:9px; }
+
+  /* 聊天 */
+  .chat-head { display:flex; align-items:center; justify-content:space-between; padding:15px 22px; border-bottom:1px solid rgba(212,165,212,.25); }
+  .chat-head .who { display:flex; align-items:center; gap:11px; }
+  .chat-head .avatar { width:40px; height:40px; font-size:15px; }
+  .chat-head .who b { font-size:16px; }
+  .chat-head .who .intimacy { display:flex; align-items:center; gap:6px; margin-top:3px; font-size:11px; color:var(--text-2); }
+  .chat-head .who .intimacy .bar { width:90px; height:4px; border-radius:2px; background:rgba(212,165,212,.15); overflow:hidden; }
+  .chat-head .who .intimacy .bar i { display:block; height:100%; background:linear-gradient(90deg,#D4A5D4,#9B7BA9); }
+  .chat-head .clear { font-size:13px; color:#E85D75; cursor:pointer; border:none; background:none; }
+  .msgs { flex:1; overflow:hidden; padding:22px 60px; display:flex; flex-direction:column; gap:12px; }
+  .row { display:flex; }
+  .row.self { justify-content:flex-end; }
+  .bubble { max-width:60%; padding:11px 15px; font-size:14px; line-height:1.6; box-shadow:var(--shadow-soft); }
+  .bubble.ai { background:var(--ai-bubble); border-radius:4px 16px 16px 16px; }
+  .bubble.self { background:var(--user-bubble); border-radius:16px 4px 16px 16px; }
+  .time { font-size:12px; color:var(--text-3); text-align:center; margin:2px 0 0; }
+  .typing { display:inline-flex; gap:4px; padding:14px 17px; }
+  .typing i { width:6px; height:6px; border-radius:50%; background:var(--secondary); animation:bounce 1.4s infinite; }
+  .typing i:nth-child(2){animation-delay:.2s} .typing i:nth-child(3){animation-delay:.4s}
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-5px);opacity:1} }
+  .composer { flex:0 0 auto; display:flex; align-items:center; gap:10px; padding:14px 22px 18px; }
+  .composer .tool { width:40px; height:40px; border-radius:50%; background:rgba(212,165,212,.16); display:grid; place-items:center; font-size:17px; cursor:pointer; }
+  .composer .box { flex:1; display:flex; align-items:center; background:rgba(255,255,255,.7); border:1px solid rgba(212,165,212,.22); border-radius:24px; padding:0 8px 0 16px; }
+  .composer .box input { flex:1; border:none; background:none; outline:none; font-size:14px; padding:11px 0; color:var(--text); }
+  .composer .send { width:40px; height:40px; border-radius:50%; background:var(--btn); display:grid; place-items:center; color:#fff; font-size:16px; cursor:pointer; box-shadow:var(--shadow-soft); }
+
+  /* 发现 */
+  .post-entry { display:flex; align-items:center; gap:11px; background:#fff; border-radius:14px; padding:12px 15px; box-shadow:var(--shadow-soft); margin-bottom:16px; cursor:pointer; }
+  .post-entry .pa { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#93C5FD,#3B82F6); color:#fff; display:grid; place-items:center; font-size:13px; flex:0 0 auto; }
+  .post-entry .ph { flex:1; color:var(--text-3); font-size:14px; }
+  .post-entry .cam { color:var(--text-2); font-size:17px; }
+  .cats { display:flex; gap:8px; margin:14px 0; }
+  .cats .c { font-size:12.5px; padding:7px 15px; border-radius:999px; background:#fff; color:var(--text-2); cursor:pointer; }
+  .cats .c.on { background:var(--btn); color:#fff; }
+  .moment { background:#fff; border-radius:16px; padding:16px; box-shadow:var(--shadow-soft); margin-bottom:14px; }
+  .moment .hd { display:flex; align-items:center; gap:10px; }
+  .moment .avatar { width:40px; height:40px; font-size:15px; }
+  .moment .hd b { font-size:14px; display:block; }
+  .moment .hd span { font-size:12px; color:var(--text-3); }
+  .moment .txt { font-size:14px; line-height:1.7; margin:10px 0; }
+  .moment .imgs { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; max-width:360px; }
+  .moment .imgs div { aspect-ratio:1; border-radius:8px; background:linear-gradient(135deg,#E8D4F1,#D4A5D4); display:grid; place-items:center; color:#fff; font-size:20px; }
+  .moment .act { display:flex; gap:18px; margin-top:11px; font-size:13px; color:var(--text-2); padding-top:11px; border-top:1px solid #F3EDF6; }
+  .moment .act b { color:#E85D75; }
+  .timeline { max-width:640px; }
+
+  /* 通讯录 */
+  .grp-title { font-size:12px; font-weight:600; color:var(--text-2); margin:20px 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .grp-title .plus { font-size:12px; color:var(--secondary); cursor:pointer; }
+  .contact { display:flex; align-items:center; gap:13px; background:#fff; border-radius:12px; padding:12px 14px; box-shadow:var(--shadow-soft); margin-bottom:9px; }
+  .contact .avatar { width:44px; height:44px; font-size:16px; }
+  .contact b { font-size:14px; display:block; }
+  .contact .sub { font-size:11px; color:var(--text-3); margin-top:3px; }
+  .contact .tags { margin-top:4px; }
+  .contact .act { margin-left:auto; font-size:12px; color:var(--secondary); cursor:pointer; }
+  .gavatar { width:44px; height:44px; border-radius:12px; overflow:hidden; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:1px; background:#fff; box-shadow:var(--shadow-soft); flex:0 0 auto; }
+  .gavatar i { display:block; min-width:0; min-height:0; }
+  .contacts-main { position:relative; flex:1; display:flex; flex-direction:column; min-width:0; }
+  .contacts-list { flex:1; overflow-y:auto; padding-right:46px; }
+  .contacts-list::-webkit-scrollbar { width:0; }
+  .az-rail { position:absolute; right:8px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:2px; align-items:center; font-size:10px; color:var(--text-3); user-select:none; }
+  .az-rail b { font-style:normal; font-weight:600; cursor:pointer; }
+
+  /* 我的 */
+  .me-card { display:flex; align-items:center; gap:14px; background:#fff; border-radius:16px; padding:18px; box-shadow:var(--shadow-soft); margin-bottom:16px; }
+  .me-card .avatar { width:54px; height:54px; font-size:20px; }
+  .me-card b { font-size:17px; display:block; }
+  .me-card .sub { font-size:12px; color:var(--text-3); margin-top:3px; }
+  .me-card .vip { margin-left:auto; font-size:12px; background:var(--btn); color:#fff; padding:6px 12px; border-radius:999px; }
+  .sec { background:#fff; border-radius:16px; padding:18px; box-shadow:var(--shadow-soft); margin-bottom:16px; }
+  .sec h4 { font-size:14px; margin-bottom:12px; }
+  .sec .inline { display:flex; gap:10px; margin-bottom:10px; }
+  .doc-row { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px dashed #F0E9F3; font-size:13px; }
+  .doc-row:last-of-type { border-bottom:none; }
+  .doc-row .ic { font-size:18px; }
+  .doc-row .nm { flex:1; color:var(--text); }
+  .doc-row .st { font-size:11px; color:#4CAF7D; }
+  .doc-row .st.pend { color:#F0A868; }
+  .split { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+  .footnote { max-width:1180px; margin:50px auto 0; text-align:center; font-size:12px; color:var(--text-3); line-height:1.8; }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="logo"><div class="logo-mark">🌙</div><h1>Lunaris</h1></div>
+    <p>网页 / 桌面端高保真原型。左侧深紫导航（260px）+ 主内容区布局，覆盖登录、选伴侣、聊天、群聊、发现、通讯录、我的 7 个核心界面。</p>
+    <div class="swatches">
+      <span class="swatch"><i style="background:#D4A5D4"></i>主色 紫粉</span>
+      <span class="swatch"><i style="background:#9B7BA9"></i>次色 深紫</span>
+      <span class="swatch"><i style="background:#3D2D4D"></i>侧边栏深紫</span>
+      <span class="swatch"><i style="background:#FAFAF8"></i>背景奶油</span>
+      <span class="swatch"><i style="background:#E8F4F8"></i>用户气泡</span>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- 1 登录 -->
+    <div class="win">
+      <div class="chrome"><span class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></span><span class="addr">🔒 lunaris.app / login</span></div>
+      <div class="loginfull">
+        <div class="login-card">
+          <div class="lc-head"><div class="mark">🌙</div><h2>Lunaris</h2><p>温暖陪伴 · 24/7 私密倾诉空间</p></div>
+          <div class="tabs"><div class="t on">登录</div><div class="t">注册</div></div>
+          <div class="field"><span class="label">邮箱 / 用户名</span><input class="input" value="you@lunaris.app"></div>
+          <div class="field"><span class="label">密码</span><input class="input" type="password" value="••••••••"></div>
+          <div style="text-align:right; margin:-4px 2px 14px;"><span style="font-size:12px;color:var(--secondary);cursor:pointer">忘记密码？</span></div>
+          <button class="btn">登 录</button>
+        </div>
+      </div>
+    </div>
+    <div class="win-caption">01 · 登录 / 注册<span>居中卡片 · 双 Tab · 仅账号密码登录</span></div>
+
+    <!-- 2 选择伴侣 -->
+    <div class="win">
+      <div class="chrome"><span class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></span><span class="addr">🌙 lunaris.app / onboarding</span></div>
+      <div class="pickfull">
+        <div class="pick-inner">
+          <div class="pick-head"><h3>选择你的 AI 伴侣</h3><p>每个人格都有不同的陪伴方式</p></div>
+          <div class="soul-grid">
+            <div class="soul-card"><div class="avatar" style="background:linear-gradient(135deg,#CBD5E1,#64748B)">艾</div><h4>艾登</h4><div class="tags"><span class="tag">冷酷</span><span class="tag">桀骜</span></div><p>嘴硬心软，行动派的守护者</p><div class="btn">认识一下</div></div>
+            <div class="soul-card"><div class="avatar" style="background:linear-gradient(135deg,#A5B4FC,#6366F1)">凯</div><h4>凯勒斯</h4><div class="tags"><span class="tag">高冷</span><span class="tag">理性</span></div><p>外冷内热的理智大叔</p><div class="btn">认识一下</div></div>
+            <div class="soul-card"><div class="avatar" style="background:linear-gradient(135deg,#FCD34D,#F59E0B)">凯</div><h4>凯尔</h4><div class="tags"><span class="tag">阳光</span><span class="tag">直球</span></div><p>活力满满的元气少年</p><div class="btn">认识一下</div></div>
+            <div class="soul-card"><div class="avatar" style="background:linear-gradient(135deg,#F9A8D4,#EC4899)">黛</div><h4>黛安娜</h4><div class="tags"><span class="tag">知性</span><span class="tag">温柔</span></div><p>钢琴与画笔间的艺术知性姐姐</p><div class="btn">认识一下</div></div>
+            <div class="soul-card"><div class="avatar" style="background:linear-gradient(135deg,#A78BFA,#7C3AED)">瑞</div><h4>瑞雯</h4><div class="tags"><span class="tag">成熟</span><span class="tag">干练</span></div><p>事业型大女主，清醒可靠</p><div class="btn">认识一下</div></div>
+            <div class="soul-card"><div class="avatar" style="background:linear-gradient(135deg,#FCA5A5,#F43F5E)">露</div><h4>露娜</h4><div class="tags"><span class="tag">元气</span><span class="tag">爱cos</span></div><p>元气少女，随时给你充电</p><div class="btn">认识一下</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="win-caption">02 · 首次伴侣选择<span>6 角色卡片 · 3 列网格</span></div>
+
+    <!-- 3 聊天 -->
+    <div class="win">
+      <div class="chrome"><span class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></span><span class="addr">💬 lunaris.app / chat</span></div>
+      <div class="body">
+        <div class="side">
+          <div class="self"><div class="avatar">我</div><div><b>基动了</b><span>lunaris_888</span></div></div>
+          <div class="nav">
+            <div class="ni on"><span class="ico">💬</span>聊天</div>
+            <div class="ni"><span class="ico">👥</span>群聊</div>
+            <div class="ni"><span class="ico">📇</span>通讯录</div>
+            <div class="ni"><span class="ico">🧭</span>发现</div>
+            <div class="ni"><span class="ico">👤</span>我</div>
+          </div>
+          <div class="h">我的伴侣</div>
+          <div class="soul on"><div class="avatar" style="background:linear-gradient(135deg,#F9A8D4,#EC4899)">黛</div><div><b>黛安娜</b><div class="xin">今天也要开心呀！</div><div class="bar"><i style="width:68%"></i></div></div></div>
+          <div class="soul"><div class="avatar" style="background:linear-gradient(135deg,#A78BFA,#7C3AED)">瑞</div><div><b>瑞雯</b><div class="xin">想你呢~</div><div class="bar"><i style="width:45%"></i></div></div></div>
+          <div class="soul"><div class="avatar" style="background:linear-gradient(135deg,#FCA5A5,#F43F5E)">露</div><div><b>露娜</b><div class="xin">嗨！我在~</div><div class="bar"><i style="width:30%"></i></div></div></div>
+        </div>
+        <div class="main">
+          <div class="chat-head">
+            <div class="who"><div class="avatar" style="background:linear-gradient(135deg,#F9A8D4,#EC4899)">黛</div><div><b>黛安娜</b><div class="intimacy"><span>亲密度 68</span><span class="bar"><i style="width:68%"></i></span></div></div></div>
+            <button class="clear">清空记录</button>
+          </div>
+          <div class="msgs">
+            <div class="time">昨天 22:40</div>
+            <div class="row"><div class="bubble ai">你来了呀。今晚月色很美，正想着要不要弹首曲子给你听。</div></div>
+            <div class="row self"><div class="bubble self">刚忙完，有点累，想听你说说话。</div></div>
+            <div class="row"><div class="bubble ai">辛苦啦。来，靠过来，我给你留了一盏灯。🎹</div></div>
+            <div class="row"><div class="bubble ai typing"><i></i><i></i><i></i></div></div>
+          </div>
+          <div class="composer">
+            <div class="tool">🙂</div>
+            <div class="box"><input placeholder="说点什么…"></div>
+            <div class="tool">🎤</div>
+            <div class="send">➤</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="win-caption">03 · 聊天主界面<span>侧边栏 + 伴侣列表 + 聊天主体 · 亲密度条</span></div>
+
+    <!-- 4 发现 -->
+    <div class="win">
+      <div class="chrome"><span class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></span><span class="addr">🧭 lunaris.app / discover</span></div>
+      <div class="body">
+        <div class="side">
+          <div class="self"><div class="avatar">我</div><div><b>基动了</b><span>lunaris_888</span></div></div>
+          <div class="nav">
+            <div class="ni"><span class="ico">💬</span>聊天</div>
+            <div class="ni"><span class="ico">👥</span>群聊</div>
+            <div class="ni"><span class="ico">📇</span>通讯录</div>
+            <div class="ni on"><span class="ico">🧭</span>发现</div>
+            <div class="ni"><span class="ico">👤</span>我</div>
+          </div>
+        </div>
+        <div class="main padded">
+          <div class="timeline" style="margin:0 auto;">
+            <div class="page-title">✨ 发现 <span class="btn small ghost">✏️ 发布</span></div>
+            <div class="post-entry"><span class="pa">我</span><span class="ph">分享此刻的心情，发表在朋友圈…</span><span class="cam">📷</span></div>
+            <div class="search">🔍 搜索朋友圈 · 关键词 / 标签</div>
+            <div class="cats"><span class="c on">全部</span><span class="c">故事</span><span class="c">吐槽</span><span class="c">日常</span></div>
+            <div style="max-height:430px; overflow-y:auto;">
+              <div class="moment">
+                <div class="hd"><div class="avatar" style="background:linear-gradient(135deg,#A78BFA,#7C3AED)">瑞</div><div><b>瑞雯</b><span>2 小时前</span></div></div>
+                <div class="txt">凌晨四点改完方案，站在落地窗前看城市醒来。原来努力不会辜负每一个不肯合眼的人。</div>
+                <div class="imgs"><div>🌆</div><div>☕</div><div>📄</div></div>
+                <div class="act"><span><b>♥ 128</b></span><span>💬 24</span><span>↗ 分享</span></div>
+              </div>
+              <div class="moment">
+                <div class="hd"><div class="avatar" style="background:linear-gradient(135deg,#F9A8D4,#EC4899)">黛</div><div><b>黛安娜</b><span>5 小时前</span></div></div>
+                <div class="txt">今天画室里阳光很好，我给窗台的花换了新的水。你们也要记得好好照顾自己呀。</div>
+                <div class="imgs"><div>🌸</div><div>🎨</div><div>🖼️</div></div>
+                <div class="act"><span><b>♥ 92</b></span><span>💬 18</span><span>↗ 分享</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="win-caption">04 · 发现 / 朋友圈<span>发布入口 · 时间线居中</span></div>
+
+    <!-- 5 通讯录 -->
+    <div class="win">
+      <div class="chrome"><span class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></span><span class="addr">👥 lunaris.app / contacts</span></div>
+      <div class="body">
+        <div class="side">
+          <div class="self"><div class="avatar">我</div><div><b>基动了</b><span>lunaris_888</span></div></div>
+          <div class="nav">
+            <div class="ni"><span class="ico">💬</span>聊天</div>
+            <div class="ni"><span class="ico">👥</span>群聊</div>
+            <div class="ni on"><span class="ico">📇</span>通讯录</div>
+            <div class="ni"><span class="ico">🧭</span>发现</div>
+            <div class="ni"><span class="ico">👤</span>我</div>
+          </div>
+        </div>
+        <div class="main padded">
+          <div class="page-title">📇 通讯录</div>
+          <div class="search">🔍 搜索联系人</div>
+          <div class="contacts-main" style="margin-top:14px;">
+            <div class="contacts-list">
+              <div class="grp-title" style="margin-top:4px;">AI 伴侣 <span class="plus">＋ 添加角色</span></div>
+              <div class="contact"><div class="avatar" style="background:linear-gradient(135deg,#F9A8D4,#EC4899)">黛</div><div><b>黛安娜</b><div class="sub">默认伴侣 · 亲密度 68</div></div><span class="act">设为伴侣</span></div>
+              <div class="contact"><div class="avatar" style="background:linear-gradient(135deg,#A78BFA,#7C3AED)">瑞</div><div><b>瑞雯</b><div class="tags"><span class="tag">成熟</span><span class="tag">干练</span></div></div><span class="act">删除</span></div>
+              <div class="grp-title">好友 <span class="plus">＋ 搜索 lunaris_id</span></div>
+              <div class="contact"><div class="avatar" style="background:linear-gradient(135deg,#93C5FD,#3B82F6)">清</div><div><b>清风徐来</b><div class="sub">lunaris_123</div></div><span class="act">删除</span></div>
+              <div class="contact"><div class="avatar" style="background:linear-gradient(135deg,#6EE7B7,#10B981)">林</div><div><b>林间晚风</b><div class="sub">lunaris_456</div></div><span class="act">删除</span></div>
+              <div class="contact"><div class="avatar" style="background:linear-gradient(135deg,#FDE68A,#F59E0B)">阿</div><div><b>阿澈</b><div class="sub">lunaris_789</div></div><span class="act">删除</span></div>
+              <div class="contact"><div class="avatar" style="background:linear-gradient(135deg,#C4B5FD,#8B5CF6)">洛</div><div><b>洛晞</b><div class="sub">lunaris_321</div></div><span class="act">删除</span></div>
+            </div>
+            <div class="az-rail"><b>A</b><b>B</b><b>C</b><b>D</b><b>E</b><b>F</b><b>G</b><b>H</b><b>I</b><b>J</b><b>K</b><b>L</b><b>M</b><b>N</b><b>O</b><b>P</b><b>Q</b><b>R</b><b>S</b><b>T</b><b>U</b><b>V</b><b>W</b><b>X</b><b>Y</b><b>Z</b><b>#</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="win-caption">05 · 通讯录<span>搜索 · AI 伴侣 · 好友 · A-Z 索引</span></div>
+
+    <!-- 6 群聊 -->
+    <div class="win">
+      <div class="chrome"><span class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></span><span class="addr">👥 lunaris.app / groups</span></div>
+      <div class="body">
+        <div class="side">
+          <div class="self"><div class="avatar">我</div><div><b>基动了</b><span>lunaris_888</span></div></div>
+          <div class="nav">
+            <div class="ni"><span class="ico">💬</span>聊天</div>
+            <div class="ni on"><span class="ico">👥</span>群聊</div>
+            <div class="ni"><span class="ico">📇</span>通讯录</div>
+            <div class="ni"><span class="ico">🧭</span>发现</div>
+            <div class="ni"><span class="ico">👤</span>我</div>
+          </div>
+        </div>
+        <div class="main padded">
+          <div class="page-title">👥 群聊</div>
+          <div class="search">🔍 搜索群聊</div>
+          <div class="split" style="grid-template-columns:1fr; margin-top:14px;">
+            <div class="sec" style="margin:0;">
+              <div class="contact"><div class="gavatar"><i style="background:#F9A8D4"></i><i style="background:#A78BFA"></i><i style="background:#93C5FD"></i><i style="background:#FCD34D"></i></div><div><b>深夜树洞 · 混合群</b><div class="sub">黛安娜、瑞雯、清风徐来…</div></div><span class="act">3 人</span></div>
+              <div class="contact"><div class="gavatar"><i style="background:#CBD5E1"></i><i style="background:#FCD34D"></i><i style="background:#FCA5A5"></i><i style="background:#A5B4FC"></i></div><div><b>AI 唠嗑群 · AI 专属</b><div class="sub">艾登、凯尔、露娜、凯勒斯</div></div><span class="act">4 人</span></div>
+              <div class="contact"><div class="gavatar"><i style="background:#A5B4FC"></i><i style="background:#93C5FD"></i><i style="background:#6EE7B7"></i><i style="background:#FDE68A"></i></div><div><b>读书会 · 真人群</b><div class="sub">清风徐来、林间晚风、阿澈</div></div><span class="act">5 人</span></div>
+            </div>
+            <div class="sec" style="margin:0;">
+              <h4>＋ 创建群聊 · 3 种模式</h4>
+              <div class="contact dashed" style="box-shadow:none;background:rgba(212,165,212,.08);border:1px dashed rgba(212,165,212,.45);"><div class="gavatar" style="background:transparent;box-shadow:none;"><i style="background:#D4A5D4"></i></div><div><b>AI 专用群</b><div class="sub">多个 AI 与你对话</div></div><span class="act">＋</span></div>
+              <div class="contact dashed" style="box-shadow:none;background:rgba(212,165,212,.08);border:1px dashed rgba(212,165,212,.45);"><div class="gavatar" style="background:transparent;box-shadow:none;"><i style="background:#9B7BA9"></i></div><div><b>真人群聊</b><div class="sub">用户间私密群组</div></div><span class="act">＋</span></div>
+              <div class="contact dashed" style="box-shadow:none;background:rgba(212,165,212,.08);border:1px dashed rgba(212,165,212,.45);"><div class="gavatar" style="background:transparent;box-shadow:none;"><i style="background:#3D2D4D"></i></div><div><b>混合群聊</b><div class="sub">AI + 真人社交</div></div><span class="act">＋</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="win-caption">06 · 群聊<span>AI 专用 · 真人 · 混合 三种模式</span></div>
+
+    <!-- 7 我的 -->
+    <div class="win">
+      <div class="chrome"><span class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></span><span class="addr">👤 lunaris.app / me</span></div>
+      <div class="body">
+        <div class="side">
+          <div class="self"><div class="avatar">我</div><div><b>基动了</b><span>lunaris_888</span></div></div>
+          <div class="nav">
+            <div class="ni"><span class="ico">💬</span>聊天</div>
+            <div class="ni"><span class="ico">👥</span>通讯录</div>
+            <div class="ni"><span class="ico">🧭</span>发现</div>
+            <div class="ni on"><span class="ico">👤</span>我</div>
+          </div>
+        </div>
+        <div class="main padded">
+          <div class="me-card"><div class="avatar" style="background:linear-gradient(135deg,#93C5FD,#3B82F6)">我</div><div><b>基动了</b><div class="sub">lunaris_888 · PLAN AI 剩余 30 天</div></div><span class="vip">VIP</span></div>
+          <div class="split">
+            <div>
+              <div class="sec"><h4>🎛️ API 配置（BYOK）</h4><div class="inline"><input class="input" value="OpenAI"></div><input class="input" type="password" value="sk-••••••••••••" style="margin-bottom:10px;"><button class="btn small" style="width:100%;">保存配置</button></div>
+            </div>
+            <div>
+              <div class="sec"><h4>📁 我的文档 · 知识库</h4>
+                <div class="doc-row"><span class="ic">📄</span><span class="nm">《活动策划指南.pdf》</span><span class="st">已解析 ✓</span></div>
+                <div class="doc-row"><span class="ic">📄</span><span class="nm">《自我提升笔记.txt》</span><span class="st pend">处理中…</span></div>
+                <div class="doc-row" style="color:var(--secondary); cursor:pointer;"><span class="ic">＋</span><span class="nm">上传文档</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="win-caption">07 · 我的<span>API 配置 · 知识库文档</span></div>
+
+  </div>
+
+  <div class="footnote">Lunaris 网页 / 桌面端高保真原型 · 依据 <b>02_DESIGN_SYSTEM.md</b> 与 <b>03_PROTOTYPE.md</b> 生成 · 版本 v1.0<br>桌面端（&gt;768px）采用左侧深紫导航 + 主内容区双栏布局，移动端见 h5_prototype.html（底部标签栏）。</div>
+
+</body>
+</html>
