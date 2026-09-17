@@ -17,6 +17,7 @@ scripts/init_db.py —— 一键初始化数据库：建库 → 启 pgvector →
 3. 连目标库：CREATE EXTENSION IF NOT EXISTS vector（pgvector）
 4. 跑 alembic upgrade head（建表）
 5. 写 6 个种子角色（复用 backend/scripts/init_souls.py）
+6. 写初始管理员账号（admin/admin123、luna/luna123，is_admin=True，幂等）
 """
 import os
 import subprocess
@@ -115,6 +116,38 @@ def run_seed() -> None:
     )
 
 
+# 初始管理员账号（与 README 管理后台登录说明一致）
+_INIT_ADMINS = [
+    {"username": "admin", "password": "admin123", "gender": "male", "nickname": "管理员", "birthday": "1995-01-01"},
+    {"username": "luna", "password": "luna123", "gender": "female", "nickname": "Luna", "birthday": "1996-01-01"},
+]
+
+
+def run_admin_seed(info: dict) -> None:
+    """写初始管理员账号（幂等）。admin/luna is_admin=True、role='admin'，密码用 bcrypt 哈希。"""
+    import bcrypt
+    import uuid
+    conn = _connect(info, info["dbname"])
+    conn.autocommit = True
+    cur = conn.cursor()
+    for acc in _INIT_ADMINS:
+        cur.execute("SELECT 1 FROM users WHERE username = %s", (acc["username"],))
+        if cur.fetchone():
+            print(f"⏭️  管理员 {acc['username']} 已存在，跳过")
+            continue
+        hashed = bcrypt.hashpw(acc["password"].encode("utf-8")[:72], bcrypt.gensalt()).decode("utf-8")
+        cur.execute(
+            """INSERT INTO users
+               (id, username, password_hash, gender, nickname, birthday,
+                is_active, role, is_admin, theme, font_size, created_at)
+               VALUES (%s, %s, %s, %s, %s, %s, TRUE, 'admin', TRUE, 'light', 'normal', now())""",
+            (str(uuid.uuid4()), acc["username"], hashed, acc["gender"], acc["nickname"], acc["birthday"]),
+        )
+        print(f"✅ 管理员 {acc['username']} 已创建（密码 {acc['password']}，is_admin=True）")
+    cur.close()
+    conn.close()
+
+
 def main() -> None:
     settings = get_settings()
     info = _split_database_url(settings.DATABASE_URL)
@@ -137,6 +170,7 @@ def main() -> None:
         )
     run_alembic()
     run_seed()
+    run_admin_seed(info)
     print("🎉 数据库初始化完成！可启动后端：uv run uvicorn backend.main:app --reload")
 
 

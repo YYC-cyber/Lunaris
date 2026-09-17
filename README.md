@@ -44,23 +44,18 @@ Lunaris/
 ### 1. 后端启动
 
 ```bash
-# 项目根目录
-cd backend
-
+# 在仓库根目录执行
 # 安装依赖（使用 uv）
 uv sync
 
-# 配置数据库（复制环境变量模板，修改数据库连接地址）
-cp .env.example .env  # 编辑 DATABASE_URL
+# 配置环境变量（复制模板，填入数据库连接、JWT_SECRET、ENCRYPTION_KEY 等真实值）
+cp backend/.env.example backend/.env
 
-# 初始化数据库（alembic 迁移）
-uv run alembic upgrade head
+# 一键初始化数据库：建库 → 启 pgvector → alembic 迁移 → 种子角色 + 管理员账号
+uv run python scripts/init_db.py
 
 # 启动后端服务（开发模式，热重载）
-python -m uvicorn main:app --reload
-
-# 或直接运行
-python main.py
+uv run uvicorn backend.main:app --reload
 ```
 
 **后端访问地址：** `http://localhost:8000`
