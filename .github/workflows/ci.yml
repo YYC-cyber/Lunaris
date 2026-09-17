@@ -1,7 +1,9 @@
 # ============================================================
 # Lunaris CI 流水线
-# 触发：push 到 main / develop，或 PR
-# 步骤：后端测试 → 前端构建 → 数据库迁移验证
+# 触发：push 到 main / develop，提 PR 到 main，或在 Actions 页手动运行
+# 步骤：后端测试 + 迁移验证 → 前端构建 → 语法检查
+#
+# 注意：pyproject.toml 在仓库根目录，uv 命令一律在根目录执行（不要 cd backend）
 # ============================================================
 name: CI
 
@@ -10,9 +12,10 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
-  # ============ 后端测试 ============
+  # ============ 后端测试 + 迁移 ============
   backend-test:
     name: Backend Tests
     runs-on: ubuntu-latest
@@ -42,25 +45,23 @@ jobs:
         uses: astral-sh/setup-uv@v3
 
       - name: Install dependencies
-        run: |
-          cd backend
-          uv sync --no-dev
+        # 含 dev 依赖（pytest / pytest-asyncio / aiosqlite）；在仓库根目录执行
+        run: uv sync
 
       - name: Run tests
         env:
-          DATABASE_URL: postgresql+asyncpg://test:test@localhost:5432/lunaris_test
-          SECRET_KEY: test-secret
+          # 测试用例本身使用内存 SQLite（见 backend/tests/conftest.py），
+          # DATABASE_URL 仅用于通过 settings 的必填校验
+          DATABASE_URL: "sqlite+aiosqlite:///:memory:"
           JWT_SECRET: test-jwt-secret
-        run: |
-          cd backend
-          uv run python -m pytest tests/ -v --tb=short
+        run: uv run pytest backend/tests/ -v --tb=short
 
       - name: Verify migrations
+        # 迁移需要真实 PostgreSQL + pgvector，使用上方的 service 容器
         env:
           DATABASE_URL: postgresql+asyncpg://test:test@localhost:5432/lunaris_test
-        run: |
-          cd backend
-          uv run alembic upgrade head
+          JWT_SECRET: test-jwt-secret
+        run: uv run alembic -c backend/alembic/alembic.ini upgrade head
 
   # ============ 前端构建 ============
   frontend-build:
@@ -89,8 +90,9 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
+          # vite.config.ts 中 outDir 为 ../electron/renderer（桌面端与 Web 共用产物）
           name: frontend-dist
-          path: frontend/dist
+          path: electron/renderer
           retention-days: 7
 
   # ============ 代码质量检查 ============
@@ -108,8 +110,8 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v3
 
+      - name: Install dependencies
+        run: uv sync
+
       - name: Syntax check all Python files
-        run: |
-          cd backend
-          uv run python -m compileall -q .
-          echo "✅ 所有 Python 文件语法检查通过"
+        run: uv run python -m compileall -q backend

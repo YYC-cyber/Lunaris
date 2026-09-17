@@ -36,6 +36,8 @@ admin-react/
 **/.env
 **/.env.local
 **/.env.*.local
+.env.docker
+.env.docker.*
 backend/.env
 backend/.env.local
 
