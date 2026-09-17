@@ -33,7 +33,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from common.constants import MEMORY_TYPES
 from config.database import AsyncSessionLocal
 from core.security import scan_memory_content
-from dao.memory_dao import MemoryDAO
+from dao.v1_0.memory_dao import MemoryDAO
 from services.api_config_service import ApiConfigService
 from clients.llm_client import LLMClient
 from clients.embedding_client import EMBEDDING_DIM, get_embedding_client

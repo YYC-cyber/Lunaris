@@ -8,7 +8,7 @@ from sqlalchemy import and_, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from dao.base import BaseDAO
-from models.message import Message
+from models.v1_0.message import Message
 from models.user import User
 
 
@@ -50,7 +50,7 @@ class SearchService:
 
         # 会话过滤：只查询当前用户参与的对话中的消息
         # 通过 conversation_id 关联 conversations 表，检查 current_user 是否参与
-        from models.conversation import Conversation
+        from models.v1_0.conversation import Conversation
 
         stmt = (
             select(Message)

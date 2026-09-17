@@ -35,7 +35,7 @@ async def daily_report() -> dict:
             print("⏭️ 危机日报：crisis_events 表未建，跳过")
             return {"skipped": True}
 
-        from models.crisis_event import CrisisEvent
+        from models.v1_0.crisis_event import CrisisEvent
 
         # 按风险级别分组计数 + 去重用户数
         rows = (

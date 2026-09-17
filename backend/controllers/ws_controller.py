@@ -54,7 +54,7 @@ async def websocket_endpoint(
     # P2-05: 更新用户最后活跃时间，广播上线事件
     try:
         async with AsyncSessionLocal() as db:
-            from services.user_status_service import UserStatusService
+            from services.v1_0.user_status_service import UserStatusService
             user_uuid = uuid.UUID(user_id)
             await UserStatusService.update_user_last_seen(db, user_uuid)
             await UserStatusService.broadcast_user_event(user_uuid, is_online=True)
@@ -92,7 +92,7 @@ async def websocket_endpoint(
         # P2-05: 广播下线事件
         try:
             user_uuid = uuid.UUID(user_id)
-            from services.user_status_service import UserStatusService
+            from services.v1_0.user_status_service import UserStatusService
             await UserStatusService.broadcast_user_event(user_uuid, is_online=False)
         except Exception as e:
             print(f"⚠️ 广播下线事件失败: {e}")

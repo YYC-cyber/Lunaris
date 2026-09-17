@@ -71,7 +71,7 @@ async def get_users_stats(db: AsyncSession = Depends(get_db)):
     new_today = today_result.scalar() or 0
 
     # 活跃用户（最近7天有消息的用户）
-    from models.message import Message
+    from models.v1_0.message import Message
     seven_days_ago = datetime.now() - timedelta(days=7)
     active_query = select(func.count(func.distinct(Message.user_id))).where(
         Message.created_at >= seven_days_ago
@@ -157,8 +157,8 @@ async def delete_user(user_id: str, db: AsyncSession = Depends(get_db)):
 @router.get("/analytics/dashboard", dependencies=[Depends(check_admin)])
 async def get_dashboard_stats(db: AsyncSession = Depends(get_db)):
     """获取仪表盘统计"""
-    from models.message import Message
-    from models.soul import Soul
+    from models.v1_0.message import Message
+    from models.v1_0.soul import Soul
     from models.sticker import Sticker
     from models.sticker_favorite import StickerFavorite
 
@@ -278,7 +278,7 @@ async def get_dashboard_stats(db: AsyncSession = Depends(get_db)):
 @router.get("/analytics/messages", dependencies=[Depends(check_admin)])
 async def get_message_stats(db: AsyncSession = Depends(get_db)):
     """获取消息统计（新增表情包分布）"""
-    from models.message import Message
+    from models.v1_0.message import Message
     from models.sticker import Sticker
 
     # 总消息数
@@ -505,8 +505,8 @@ async def get_log_actions(db: AsyncSession = Depends(get_db)):
 @router.get("/analytics/advanced", dependencies=[Depends(check_admin)])
 async def get_advanced_analytics(db: AsyncSession = Depends(get_db)):
     """获取高级分析数据（使用真实数据库查询）"""
-    from models.message import Message
-    from models.soul import Soul
+    from models.v1_0.message import Message
+    from models.v1_0.soul import Soul
     from sqlalchemy import extract
 
     thirty_days_ago = datetime.now() - timedelta(days=30)

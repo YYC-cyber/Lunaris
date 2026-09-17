@@ -5,46 +5,80 @@
 # - 统一导出模型类，供业务层 `from models import User` 使用
 # - 新增模型：写好 models/xxx.py 后，把模块加进下面的导入即可（无需改 alembic/env.py）
 #
-# 【模型清单】
-#   User / Soul / Friendship / Message / Moment / Comment
-#   Question / Answer / Vote / MemoryRecord
-#   CrisisEvent / TtsCache / AuditLog
+# 【结构 v1.0】
+# - 顶层 models/：通用能力模型（可跨产品复用）：user / user_api_config / audit_log /
+#   system_log / permission / sensitive_word / sticker / sticker_favorite /
+#   message_edit_history / user_block / appeal / report
+# - models/v1_0/：Lunaris 产品业务模型：soul / friendship / message / memory / moment /
+#   comment / like / crisis_event / tts_cache / user_friendship / conversation / document /
+#   group_chat / group_mute / group_permission / group_announcement / message_favorite
 #
 # 【约定】每个模型文件只放一个模型类；字段/关系定义见各文件注释
-#
-# 注意：目前仅 user.py 已实现 ORM 类，其余文件为字段设计文档（占位）。
-#       补充实现后（如 class Soul(Base)），这里会自动发现并参与迁移生成。
 
-# 导入所有模型模块（当前仅 user 有类，其余为文档占位，导入无害）
+# ---- 通用能力模型模块（顶层）----
 from . import (
     user,
+    audit_log,
+    user_api_config,
+    sticker,
+    sticker_favorite,
+    user_block,
+    message_edit_history,
+    report,
+    appeal,
+    sensitive_word,
+)
+
+# ---- Lunaris v1.0 业务模型模块（.v1_0 子包；导入以触发 Base.metadata 注册）----
+from . import v1_0  # noqa: F401
+from .v1_0 import (
     soul,
     friendship,
     message,
-    message_edit_history,
     message_favorite,
     moment,
     comment,
     memory,
     crisis_event,
     tts_cache,
-    audit_log,
     user_friendship,
-    user_api_config,
     conversation,
-    sticker,
-    user_block,
     group_chat,
     group_mute,
     group_permission,
     group_announcement,
-    report,
-    appeal,
-    sensitive_word,
     document,
+    like,
 )
 
+# ---- 统一导出模型类 ----
 from .user import User
+from .user_api_config import UserApiConfig
+from .sticker import Sticker
+from .sticker_favorite import StickerFavorite
+from .user_block import UserBlock
+from .message_edit_history import MessageEditHistory
+from .audit_log import AuditLog
+from .appeal import Appeal
+from .report import Report
+from .sensitive_word import SensitiveWord
+
+from .v1_0.document import Document, DocumentChunk
+from .v1_0.memory import MemoryRecord
+from .v1_0.soul import Soul
+from .v1_0.friendship import Friendship
+from .v1_0.message import Message
+from .v1_0.message_favorite import MessageFavorite
+from .v1_0.moment import Moment
+from .v1_0.comment import Comment
+from .v1_0.like import Like
+from .v1_0.user_friendship import UserFriendship
+from .v1_0.conversation import Conversation
+from .v1_0.crisis_event import CrisisEvent
+from .v1_0.group_chat import GroupChat, GroupMember, GroupMessage, GroupInvitation, GroupMemory
+from .v1_0.group_mute import GroupMute
+from .v1_0.group_permission import GroupPermission
+from .v1_0.group_announcement import GroupAnnouncement
 
 __all__ = [
     "User",
@@ -65,54 +99,20 @@ __all__ = [
     "Report",
     "Appeal",
     "SensitiveWord",
-    "user",
     "soul",
     "friendship",
     "message",
-    "message_edit_history",
     "message_favorite",
     "moment",
     "comment",
     "memory",
     "crisis_event",
     "tts_cache",
-    "audit_log",
     "user_friendship",
-    "user_api_config",
     "conversation",
-    "sticker",
-    "user_block",
     "group_chat",
     "group_mute",
     "group_permission",
     "group_announcement",
-    "report",
-    "appeal",
-    "sensitive_word",
     "document",
 ]
-from .document import Document, DocumentChunk
-from .memory import MemoryRecord
-from .soul import Soul
-from .friendship import Friendship
-from .message import Message
-from .message_edit_history import MessageEditHistory
-from .message_favorite import MessageFavorite
-from .moment import Moment
-from .comment import Comment
-from .like import Like
-from .user_friendship import UserFriendship
-from .user_api_config import UserApiConfig
-from .conversation import Conversation
-from .sticker import Sticker
-from .crisis_event import CrisisEvent
-from .audit_log import AuditLog
-from .sticker_favorite import StickerFavorite
-from .user_block import UserBlock
-from .group_chat import GroupChat, GroupMember, GroupMessage, GroupInvitation, GroupMemory
-from .group_mute import GroupMute
-from .group_permission import GroupPermission
-from .group_announcement import GroupAnnouncement
-from .report import Report
-from .appeal import Appeal
-from .sensitive_word import SensitiveWord

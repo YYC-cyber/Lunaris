@@ -41,8 +41,8 @@ class CrisisService:
         hit,
     ) -> str:
         """处理危机：记录事件 → 返回危机话术（不经过 LLM）。"""
-        from models.crisis_event import CrisisEvent
-        from services.crisis_encryption_service import CrisisEncryptionService
+        from models.v1_0.crisis_event import CrisisEvent
+        from services.v1_0.crisis_encryption_service import CrisisEncryptionService
 
         # 确定风险等级
         risk_level = getattr(hit, "risk_level", "high")
@@ -90,7 +90,7 @@ class CrisisService:
         assigned_to_admin_id: Optional[uuid.UUID] = None,
     ) -> Optional[Dict]:
         """升级危机事件，分配给管理员"""
-        from dao.crisis_event_dao import CrisisEventDAO
+        from dao.v1_0.crisis_event_dao import CrisisEventDAO
 
         event = await CrisisEventDAO.escalate(
             db, event_id, assigned_to=assigned_to_admin_id
@@ -114,7 +114,7 @@ class CrisisService:
         notes: str,
     ) -> Optional[Dict]:
         """解决危机事件"""
-        from dao.crisis_event_dao import CrisisEventDAO
+        from dao.v1_0.crisis_event_dao import CrisisEventDAO
 
         event = await CrisisEventDAO.resolve(db, event_id, notes)
         if not event:
@@ -134,7 +134,7 @@ class CrisisService:
         offset: int = 0,
     ) -> tuple[List, int]:
         """获取已升级的危机事件（分页）"""
-        from dao.crisis_event_dao import CrisisEventDAO
+        from dao.v1_0.crisis_event_dao import CrisisEventDAO
 
         events = await CrisisEventDAO.list_escalated(db, limit=limit, offset=offset)
         # 计数

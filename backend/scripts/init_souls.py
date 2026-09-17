@@ -23,7 +23,7 @@ sys.path.insert(0, str(BACKEND_DIR))
 from sqlalchemy import select  # noqa: E402
 
 from config.database import AsyncSessionLocal  # noqa: E402
-from models.soul import Soul  # noqa: E402
+from models.v1_0.soul import Soul  # noqa: E402
 
 
 class SoulSeed(TypedDict):

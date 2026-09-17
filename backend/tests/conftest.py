@@ -189,7 +189,7 @@ async def test_soul(async_db):
 
     虚拟伴侣角色，用于测试聊天功能
     """
-    from models.soul import Soul
+    from models.v1_0.soul import Soul
 
     session = async_db()
 
@@ -219,7 +219,7 @@ async def test_soul(async_db):
 @pytest_asyncio.fixture
 async def test_souls(async_db):
     """创建多个测试角色"""
-    from models.soul import Soul
+    from models.v1_0.soul import Soul
 
     session = async_db()
 
@@ -264,7 +264,7 @@ async def test_souls(async_db):
 @pytest_asyncio.fixture
 async def test_friendship(async_db, test_user, second_user):
     """创建测试好友关系"""
-    from models.friendship import Friendship
+    from models.v1_0.friendship import Friendship
 
     session = async_db()
 
@@ -290,7 +290,7 @@ async def test_friendship(async_db, test_user, second_user):
 @pytest_asyncio.fixture
 async def test_conversation(async_db, test_user, test_soul):
     """创建测试会话"""
-    from models.conversation import Conversation
+    from models.v1_0.conversation import Conversation
 
     session = async_db()
 
@@ -314,7 +314,7 @@ async def test_conversation(async_db, test_user, test_soul):
 @pytest_asyncio.fixture
 async def test_message(async_db, test_conversation, test_user):
     """创建测试消息"""
-    from models.message import Message
+    from models.v1_0.message import Message
 
     session = async_db()
 
@@ -344,7 +344,7 @@ async def test_message(async_db, test_conversation, test_user):
 @pytest_asyncio.fixture
 async def test_moment(async_db, test_user, test_soul):
     """创建测试动态"""
-    from models.moment import Moment
+    from models.v1_0.moment import Moment
 
     session = async_db()
 
@@ -371,7 +371,7 @@ async def test_moment(async_db, test_user, test_soul):
 @pytest_asyncio.fixture
 async def test_comment(async_db, test_moment, test_user):
     """创建测试评论"""
-    from models.comment import Comment
+    from models.v1_0.comment import Comment
 
     session = async_db()
 
@@ -401,7 +401,7 @@ async def test_comment(async_db, test_moment, test_user):
 @pytest_asyncio.fixture
 async def test_group(async_db, test_user, test_soul):
     """创建测试群聊"""
-    from models.group_chat import GroupChat
+    from models.v1_0.group_chat import GroupChat
 
     session = async_db()
 

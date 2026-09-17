@@ -6,14 +6,14 @@
 
 from dao.base import BaseDAO
 from dao.api_config_dao import ApiConfigDAO
-from dao.conversation_dao import ConversationDAO
-from dao.friendship_dao import FriendshipDAO
-from dao.memory_dao import MemoryDAO
-from dao.message_dao import MessageDAO
-from dao.moment_dao import MomentDAO
-from dao.soul_dao import SoulDAO
+from dao.v1_0.conversation_dao import ConversationDAO
+from dao.v1_0.friendship_dao import FriendshipDAO
+from dao.v1_0.memory_dao import MemoryDAO
+from dao.v1_0.message_dao import MessageDAO
+from dao.v1_0.moment_dao import MomentDAO
+from dao.v1_0.soul_dao import SoulDAO
 from dao.user_dao import UserDAO
-from dao.user_friendship_dao import UserFriendshipDAO
+from dao.v1_0.user_friendship_dao import UserFriendshipDAO
 
 __all__ = [
     "BaseDAO", "ApiConfigDAO", "ConversationDAO", "FriendshipDAO",

@@ -21,11 +21,11 @@ from config.database import get_db
 from middleware.auth_middleware import get_current_user
 from models.user import User
 from dao.user_dao import UserDAO
-from dao.message_dao import MessageDAO
-from dao.friendship_dao import FriendshipDAO
-from dao.moment_dao import MomentDAO
-from dao.comment_dao import CommentDAO
-from dao.memory_dao import MemoryDAO
+from dao.v1_0.message_dao import MessageDAO
+from dao.v1_0.friendship_dao import FriendshipDAO
+from dao.v1_0.moment_dao import MomentDAO
+from dao.v1_0.comment_dao import CommentDAO
+from dao.v1_0.memory_dao import MemoryDAO
 from schemas.user_profile import UserProfileUpdateRequest
 
 logger = logging.getLogger(__name__)
@@ -72,7 +72,7 @@ async def export_user_data(
         # 2. 收集所有消息（如果 MessageDAO 存在）
         messages = []
         try:
-            from dao.message_dao import MessageDAO
+            from dao.v1_0.message_dao import MessageDAO
             user_messages = await MessageDAO.get_by_user(db, user.id)
             messages = [
                 {
@@ -89,7 +89,7 @@ async def export_user_data(
         # 3. 收集好友关系（如果 FriendshipDAO 存在）
         friendships = []
         try:
-            from dao.friendship_dao import FriendshipDAO
+            from dao.v1_0.friendship_dao import FriendshipDAO
             user_friendships = await FriendshipDAO.get_by_user(db, user.id)
             friendships = [
                 {
@@ -104,7 +104,7 @@ async def export_user_data(
         # 4. 收集朋友圈动态
         moments = []
         try:
-            from dao.moment_dao import MomentDAO
+            from dao.v1_0.moment_dao import MomentDAO
             user_moments = await MomentDAO.get_by_user(db, user.id)
             moments = [
                 {
@@ -120,7 +120,7 @@ async def export_user_data(
         # 5. 收集记忆库
         memories = []
         try:
-            from dao.memory_dao import MemoryDAO
+            from dao.v1_0.memory_dao import MemoryDAO
             user_memories = await MemoryDAO.get_by_user(db, user.id)
             memories = [
                 {
@@ -201,7 +201,7 @@ async def delete_account_permanently(
 
         # 1. 删除消息
         try:
-            from dao.message_dao import MessageDAO
+            from dao.v1_0.message_dao import MessageDAO
             deleted_count = await MessageDAO.delete_by_user(db, user_id)
             deletion_log["deleted_items"].append({
                 "type": "messages",
@@ -213,7 +213,7 @@ async def delete_account_permanently(
 
         # 2. 删除好友关系
         try:
-            from dao.friendship_dao import FriendshipDAO
+            from dao.v1_0.friendship_dao import FriendshipDAO
             deleted_count = await FriendshipDAO.delete_by_user(db, user_id)
             deletion_log["deleted_items"].append({
                 "type": "friendships",
@@ -225,7 +225,7 @@ async def delete_account_permanently(
 
         # 3. 删除朋友圈动态
         try:
-            from dao.moment_dao import MomentDAO
+            from dao.v1_0.moment_dao import MomentDAO
             deleted_count = await MomentDAO.delete_by_user(db, user_id)
             deletion_log["deleted_items"].append({
                 "type": "moments",
@@ -237,7 +237,7 @@ async def delete_account_permanently(
 
         # 4. 删除记忆库
         try:
-            from dao.memory_dao import MemoryDAO
+            from dao.v1_0.memory_dao import MemoryDAO
             deleted_count = await MemoryDAO.delete_by_user(db, user_id)
             deletion_log["deleted_items"].append({
                 "type": "memories",
@@ -249,7 +249,7 @@ async def delete_account_permanently(
 
         # 5. 删除评论和点赞
         try:
-            from dao.comment_dao import CommentDAO
+            from dao.v1_0.comment_dao import CommentDAO
             deleted_count = await CommentDAO.delete_by_user(db, user_id)
             deletion_log["deleted_items"].append({
                 "type": "comments",

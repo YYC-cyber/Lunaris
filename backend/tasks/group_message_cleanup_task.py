@@ -6,7 +6,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 
 from config.settings import get_settings
-from models.group_chat import GroupMessage
+from models.v1_0.group_chat import GroupMessage
 from ws.connection_manager import get_connection_manager
 import logging
 
@@ -53,7 +53,7 @@ async def cleanup_expired_messages() -> None:
                 logger.info(f"✅ 群聊消息清理完成: 标记 {deleted_count} 条已过期消息")
 
                 # 推送消息删除事件给群组的所有成员
-                from dao.group_chat_dao import GroupMemberDAO
+                from dao.v1_0.group_chat_dao import GroupMemberDAO
 
                 for group_id in group_ids:
                     try:

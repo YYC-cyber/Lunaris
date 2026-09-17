@@ -1,0 +1,7 @@
+项目背景：针对传统社交应用功能单一、AI 对话缺乏长期记忆、体验碎片化等痛点，搭建 AI 虚拟伴侣桌面应用，实现「角色管理→智能对话→朋友圈社交→群聊互动」功能闭环。核心贡献
+1. 后端架构与部署：按用户认证、聊天、社交、后台管理四大模块拆分，搭建 FastAPI 分层服务骨架（Controller→Service→DAO→Model），设计 11 张核心数据表，实现 JWT 鉴权与权限控制；Docker Compose 编排全栈服务 + GitHub Actions CI/CD
+2. AI 对话与长期记忆：基于 OpenAI GPT-3.5 + LangChain 上下文管理实现多轮对话，基于 RAG + pgvector 实现长期记忆与语义检索，结合亲密度阶段动态构建 system prompt，保证角色一致性
+3. 实时通信与社交：基于 WebSocket 实现流式消息、在线状态与心跳检测，实现朋友圈、群聊、好友等社交功能
+项目成果
+1. 覆盖 11 张核心数据表与 20+ API 接口，支撑朋友圈、群聊、好友等功能闭环，响应延迟秒级、消息收发稳定；Docker Compose 一键部署 + CI/CD 自动化覆盖构建、测试与镜像推送全流程
+技术栈：FastAPI · Python 3.10 · PostgreSQL · pgvector · Redis · SQLAlchemy · OpenAI API · RAG · LangChain · WebSocket · JWT · Docker · GitHub Actions

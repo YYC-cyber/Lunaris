@@ -140,16 +140,22 @@ def create_app() -> FastAPI:
             return {"status": "unhealthy", "database": "disconnected", "error": str(e)}
 
     # ---- 业务路由 ----
+    # 通用能力控制器（顶层，可跨产品复用）
     from controllers import (
-        auth_controller, soul_controller, chat_controller, moment_controller,
-        friend_controller, settings_controller, admin_controller, conversation_controller,
-        voice_controller, sticker_controller, ws_controller,
-        upload_controller, group_controller, user_data_controller, report_controller,
-        appeal_controller, sensitive_word_controller, crisis_escalation_controller,
-        block_controller, admin_batch_controller, admin_export_controller,
-        ui_preference_controller, search_controller, user_status_controller, friend_search_controller,
-        group_mute_controller, group_permission_controller, group_announcement_controller,
-        monitor_controller, knowledge_controller,
+        auth_controller, settings_controller, admin_controller, admin_batch_controller,
+        admin_export_controller, sticker_controller, ws_controller,
+        upload_controller, user_data_controller, report_controller,
+        appeal_controller, sensitive_word_controller, block_controller,
+        search_controller, monitor_controller,
+    )
+    # Lunaris v1.0 产品业务控制器
+    from controllers.v1_0 import (
+        soul_controller, chat_controller, moment_controller,
+        friend_controller, conversation_controller, voice_controller,
+        group_controller, group_mute_controller, group_permission_controller,
+        group_announcement_controller, crisis_escalation_controller,
+        ui_preference_controller, user_status_controller, friend_search_controller,
+        knowledge_controller,
     )
     app.include_router(auth_controller.router, prefix="/api/auth", tags=["认证"])
     app.include_router(user_data_controller.router, tags=["用户数据"])  # 数据导出、删除、更新

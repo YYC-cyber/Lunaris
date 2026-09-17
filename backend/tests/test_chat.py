@@ -5,8 +5,8 @@
 """
 from common.helpers import extract_emotion, intimacy_stage
 from core.memory import parse_json
-from services.chat_service import _is_meaningful
-from services.context_service import SoulPromptLoader
+from services.v1_0.chat_service import _is_meaningful
+from services.v1_0.context_service import SoulPromptLoader
 
 
 # ---------------- 记忆 JSON 解析 ----------------

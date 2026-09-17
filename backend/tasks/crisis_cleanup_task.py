@@ -12,7 +12,7 @@ import logging
 from datetime import datetime
 
 from config.database import AsyncSessionLocal
-from services.emergency_handling_service import CrisisCleanupService
+from services.v1_0.emergency_handling_service import CrisisCleanupService
 
 logger = logging.getLogger(__name__)
 

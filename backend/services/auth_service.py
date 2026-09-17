@@ -171,7 +171,7 @@ class AuthService:
 
         # 如果需要监护人确认，发送邮件
         if age_info["needs_guardian"]:
-            from services.guardian_email_service import GuardianEmailService
+            from services.v1_0.guardian_email_service import GuardianEmailService
             await GuardianEmailService.send_guardian_verification_email(
                 user_id=user.id,
                 username=username,
@@ -181,7 +181,7 @@ class AuthService:
             user.is_active = False
 
         # 注册后自动匹配异性伴侣
-        from services.matching_service import MatchingService
+        from services.v1_0.matching_service import MatchingService
         try:
             await MatchingService.auto_match(db, user.id, gender)
         except Exception as e:

@@ -36,11 +36,11 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.database import AsyncSessionLocal
-from models.soul import Soul
-from models.moment import Moment
+from models.v1_0.soul import Soul
+from models.v1_0.moment import Moment
 from clients.llm_client import LLMClient
 from clients.image_client import get_image_client
-from services.context_service import load_soul_prompt
+from services.v1_0.context_service import load_soul_prompt
 
 
 async def generate_moment_for_soul(

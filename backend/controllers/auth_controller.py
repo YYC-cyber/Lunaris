@@ -71,8 +71,8 @@ async def register(
         )
 
     # 自动配对（AUTH-05）：注册成功即分配一位异性 AI 伴侣
-    from services.matching_service import MatchingService
-    from services.soul_service import SoulService
+    from services.v1_0.matching_service import MatchingService
+    from services.v1_0.soul_service import SoulService
     try:
         friendship = await MatchingService.auto_match(db, user.id, user.gender)
         await db.commit()
@@ -210,7 +210,7 @@ async def verify_guardian(
     Returns:
         验证结果和激活账户
     """
-    from services.guardian_email_service import GuardianEmailService
+    from services.v1_0.guardian_email_service import GuardianEmailService
     from dao.user_dao import UserDAO
 
     # 验证令牌

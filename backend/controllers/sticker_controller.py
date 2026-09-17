@@ -78,7 +78,7 @@ async def get_recent_stickers(
     db: AsyncSession = Depends(get_db),
 ):
     """获取用户最近使用的表情包列表。"""
-    from dao.message_dao import MessageDAO
+    from dao.v1_0.message_dao import MessageDAO
 
     recent_stickers = await MessageDAO.list_recent_stickers(db, user.id, limit)
     return {"data": recent_stickers}

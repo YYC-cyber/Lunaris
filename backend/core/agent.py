@@ -154,7 +154,7 @@ class HermesAgent:
 
         from clients.embedding_client import get_embedding_client
         from config.database import AsyncSessionLocal
-        from dao.memory_dao import MemoryDAO
+        from dao.v1_0.memory_dao import MemoryDAO
 
         op = args.get("operation")
         mtype = args.get("memory_type") or "user_profile"
@@ -204,7 +204,7 @@ class HermesAgent:
     async def _maybe_summarize(self, db) -> None:
         """记忆条数超阈值时触发后台滚动摘要（与 core.memory 保持一致）。"""
         from core.memory import SUMMARIZE_THRESHOLD, schedule_summarize
-        from dao.memory_dao import MemoryDAO
+        from dao.v1_0.memory_dao import MemoryDAO
         count = await MemoryDAO.count(db, user_id=self.user_id, soul_id=self.soul_id)
         if count > SUMMARIZE_THRESHOLD:
             schedule_summarize(self.user_id, self.soul_id)

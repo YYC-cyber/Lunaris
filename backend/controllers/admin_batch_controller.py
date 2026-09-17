@@ -14,7 +14,7 @@ import uuid
 from config.database import get_db
 from middleware.auth_middleware import get_current_user, is_admin_user
 from models.user import User
-from models.message import Message
+from models.v1_0.message import Message
 
 router = APIRouter()
 

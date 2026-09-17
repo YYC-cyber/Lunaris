@@ -1,0 +1,143 @@
+# ============================================================
+# Lunaris Docker Compose —— 生产环境
+# 包含：PostgreSQL + Redis + 后端 API + 前端
+#
+# 使用方法：
+#   1. 确保 .env 文件存在且填入真实的密钥和 API Keys
+#   2. docker compose up -d --build
+#   3. 访问 http://localhost:3000 (前端) 或 http://localhost:8001 (API)
+#
+# 环境变量优先级（从高到低）：
+#   .env 文件 > docker-compose.yml > 默认值
+# ============================================================
+
+services:
+  # ============ PostgreSQL 数据库（pgvector 支持向量检索）============
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: lunaris-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lunaris}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lunaris_secure_pw}
+      POSTGRES_DB: ${POSTGRES_DB:-lunaris_db}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - lunaris
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lunaris}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ============ Redis 缓存 & 会话存储 ============
+  cache:
+    image: redis:7-alpine
+    container_name: lunaris-cache
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-lunaris_cache_pw}
+    volumes:
+      - redisdata:/data
+    networks:
+      - lunaris
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-lunaris_cache_pw}", "--no-auth-warning", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============ 后端 FastAPI ============
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: lunaris-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    environment:
+      # 数据库连接
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-lunaris}:${POSTGRES_PASSWORD:-lunaris_secure_pw}@db:5432/${POSTGRES_DB:-lunaris_db}
+
+      # 认证密钥（必填）
+      JWT_SECRET: ${JWT_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+
+      # LLM（可选，使用默认值则无 AI 功能）
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com/v1}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-v4-flash}
+
+      # 外部服务
+      EMBEDDING_API_KEY: ${EMBEDDING_API_KEY:-}
+      EMBEDDING_BASE_URL: ${EMBEDDING_BASE_URL:-https://api.siliconflow.cn/v1}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-BAAI/bge-m3}
+
+      # 日志与监控
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      ENABLE_SEMANTIC_SCAN: ${ENABLE_SEMANTIC_SCAN:-false}
+
+      # Redis 缓存
+      REDIS_URL: redis://:${REDIS_PASSWORD:-lunaris_cache_pw}@cache:6379/0
+
+      # CORS 配置
+      CORS_ORIGINS: http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://www-api.u3936528.nyat.app:40900
+
+      # 环境标记
+      ENVIRONMENT: production
+
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./backend/data:/app/backend/data
+      - ./backend/logs:/app/backend/logs
+      - ./backend/alembic:/app/backend/alembic
+    networks:
+      - lunaris
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)\" || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # ============ 前端 Nginx（静态托管 + 反向代理）============
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: lunaris-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    environment:
+      # Vite 构建时的环境变量
+      VITE_API_BASE: ${VITE_API_BASE:-}
+    networks:
+      - lunaris
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  pgdata:
+    driver: local
+  redisdata:
+    driver: local
+
+networks:
+  lunaris:
+    driver: bridge
